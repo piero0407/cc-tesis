@@ -1,3 +1,3 @@
 # cc-tesis
 
-Hola soy genial
+Repo para compartir los avances del proyecto.
