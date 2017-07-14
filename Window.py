@@ -8,20 +8,29 @@ from PIL import Image, ImageTk
 
 def key(event):
     global count, frame, x, y, w, h
-    cropped = frame[y:y + h, x:x + w]
+    cropped = frame[y:h, x:w]
     '''print("pressed", repr(event.char))'''
     if event.char == '1':
-        cv2.imwrite(r".\\frame%c_number%d.jpg" % (event.char, count), cropped)
+        cv2.imwrite(r".\\SavedFrames\\frame%c_number%d.jpg" %
+                    (event.char, count), cropped)
     if event.char == '2':
-        cv2.imwrite(r".\\frame%c_number%d.jpg" % (event.char, count), cropped)
+        cv2.imwrite(r".\\SavedFrames\\frame%c_number%d.jpg" %
+                    (event.char, count), cropped)
     if event.char == '3':
-        cv2.imwrite(r".\\frame%c_number%d.jpg" % (event.char, count), cropped)
+        cv2.imwrite(r".\\SavedFrames\\frame%c_number%d.jpg" %
+                    (event.char, count), cropped)
     if event.char == '4':
-        cv2.imwrite(r".\\frame%c_number%d.jpg" % (event.char, count), cropped)
+        cv2.imwrite(r".\\SavedFrames\\frame%c_number%d.jpg" %
+                    (event.char, count), cropped)
     if event.char == '5':
-        cv2.imwrite(r".\\frame%c_number%d.jpg" % (event.char, count), cropped)
+        cv2.imwrite(r".\\SavedFrames\\frame%c_number%d.jpg" %
+                    (event.char, count), cropped)
     if event.char == '6':
-        cv2.imwrite(r".\\frame%c_number%d.jpg" % (event.char, count), cropped)
+        cv2.imwrite(r".\\SavedFrames\\frame%c_number%d.jpg" %
+                    (event.char, count), cropped)
+    if event.char == '7':
+        cv2.imwrite(r".\\SavedFrames\\frame%c_number%d.jpg" %
+                    (event.char, count), cropped)
 
 
 def getContours(thresh):
@@ -116,11 +125,11 @@ def getContours(thresh):
     # cv2.putText(correctedFrame, str(result),
     #            (100, 100), font, 2, (255, 255, 255), 2)
 
-    return cnts, hull
+    return cnts, hull, cx, cy
 
 
 def show_frame():
-    global count, frame, x, y, w, h
+    global count, frame, cx, cy, x, y, w, h
     '''Getting image from the Camera'''
     ret, frame = videoCapture.read()
     frame = cv2.flip(frame, 1)
@@ -157,18 +166,29 @@ def show_frame():
     median = cv2.medianBlur(dilation3, 5)
     ret, thresh = cv2.threshold(median, 127, 255, 0)
 
-    cnts, hull = getContours(filtered)
+    cnts, hull, cx, cy = getContours(filtered)
 
     # Print bounding rectangle
-    x, y, w, h = cv2.boundingRect(cnts)
+    # x, y, w, h = cv2.boundingRect(cnts)
+    x, y, w, h = cx - int(W * .5), cy - int(H * 0.5), cx + \
+        int(W * .5), cy + int(H * 0.5)
     # dw, dh = w / W, h / H
     # w, h = int(w * dh), int(h * dh)
 
-    img = cv2.rectangle(correctedFrame, (x, y),
-                        (x + w, y + h), (0, 128, 128), 2)
-    cv2.drawContours(correctedFrame, [hull], -1, (255, 255, 255), 2)
+    if x < 0:
+        x = 0
+    elif y < 0:
+        y = 0
+    elif w > frame.shape[1]:
+        w = frame.shape[1]
+    elif h > frame.shape[0]:
+        h = frame.shape[0]
 
-    cropped = correctedFrame[y:y + h, x:x + w]
+    # img = cv2.rectangle(correctedFrame, (x, y),
+    #                    (x + w, y + h), (0, 128, 128), 2)
+    # cv2.drawContours(correctedFrame, [hull], -1, (255, 255, 255), 2)
+
+    cropped = correctedFrame[y:h, x:w]
     cropped = cv2.resize(cropped, (W, H))
 
     '''Show Image on the TK Window'''
