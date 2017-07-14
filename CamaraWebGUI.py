@@ -31,6 +31,9 @@ def key(event):
     if event.char == '7':
         cv2.imwrite(r".\\SavedFrames\\frame%c_number%d.jpg" %
                     (event.char, count), cropped)
+    if event.char == '8':
+        cv2.imwrite(r".\\SavedFrames\\frame%c_number%d.jpg" %
+                    (event.char, count), cropped)
 
 
 def getContours(thresh):
