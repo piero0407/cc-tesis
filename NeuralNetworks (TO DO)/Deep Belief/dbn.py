@@ -7,7 +7,7 @@ import tensorflow as tf
 import numpy as np
 # Image library for image manipulation
 from PIL import Image
-#import Image
+# import Image
 # Utils file
 from utils import tile_raster_images
 
@@ -153,10 +153,6 @@ for rbm in rbm_list:
     rbm.train(inpX)
     # Return the output layer
     inpX = rbm.rbm_outpt(inpX)
-
-import numpy as np
-import math
-import tensorflow as tf
 
 
 class NN(object):
