@@ -41,6 +41,10 @@ def getContours(thresh):
     thresh, contours, hierarchy = cv2.findContours(
         thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
+    if (contours == []):
+        cx, cy = int(W*.5), int(H*.5)
+        return [], [], cx, cy
+
     max_area = 100
     ci = 0
     for i in range(len(contours)):

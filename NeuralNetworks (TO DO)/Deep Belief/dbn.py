@@ -10,6 +10,37 @@ from PIL import Image
 # import Image
 # Utils file
 from utils import tile_raster_images
+'''
+# Getting the MNIST data provided by Tensorflow
+from tensorflow.examples.tutorials.mnist import input_data
+
+# Loading in the mnist data
+mnist = input_data.read_data_sets("MNIST-data/", one_hot=True)
+trX, trY, teX, teY = mnist.train.images, mnist.train.labels, mnist.test.images,\
+    mnist.test.labels
+
+print(teY)
+'''
+import gzip
+
+with gzip.open('Marcel-data/train-images-ubyte.gz', 'rb') as f:
+    trX = np.frombuffer(f.read())
+with gzip.open('Marcel-data/train-labels-ubyte.gz', 'rb') as f:
+    trY = np.frombuffer(f.read())
+with gzip.open('Marcel-data/test-images-ubyte.gz', 'rb') as f:
+    teX = np.frombuffer(f.read())
+with gzip.open('Marcel-data/test-labels-ubyte.gz', 'rb') as f:
+    teY = np.frombuffer(f.read())
+
+trX = trX.reshape((-1, 5016))
+trY = trY.reshape((-1, 6))
+teX = teX.reshape((-1, 5016))
+teY = teY.reshape((-1, 6))
+
+print(trX.shape)
+print(trY.shape)
+print(teX.shape)
+print(teY.shape)
 
 # Class that defines the behavior of the RBM
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -111,7 +142,7 @@ class RBM(object):
 
     # Create expected output for our DBN
     def rbm_outpt(self, X):
-        input_X = tf.constant(X)
+        input_X = tf.constant(X, dtype=np.float32)
         _w = tf.constant(self.w)
         _hb = tf.constant(self.hb)
         out = tf.nn.sigmoid(tf.matmul(input_X, _w) + _hb)
@@ -120,16 +151,8 @@ class RBM(object):
             return sess.run(out)
 
 
-# Getting the MNIST data provided by Tensorflow
-from tensorflow.examples.tutorials.mnist import input_data
-
-# Loading in the mnist data
-mnist = input_data.read_data_sets("MNIST-data/", one_hot=True)
-trX, trY, teX, teY = mnist.train.images, mnist.train.labels, mnist.test.images,\
-    mnist.test.labels
-
-# create 2 layers of RBM with size 400 and 100
-RBM_hidden_sizes = [500, 200, 50]
+# create 4 layers of RBM
+RBM_hidden_sizes = [2500, 1000, 500, 250, 125]
 
 # Since we are training, set input as training data
 inpX = trX
@@ -139,6 +162,8 @@ rbm_list = []
 
 # Size of inputs is the number of inputs in the training set
 input_size = inpX.shape[1]
+
+print(input_size)
 
 # For each RBM we want to generate
 for i, size in enumerate(RBM_hidden_sizes):
@@ -164,10 +189,10 @@ class NN(object):
         self._Y = Y
         self.w_list = []
         self.b_list = []
-        self._learning_rate = 1.0
+        self._learning_rate = 0.001
         self._momentum = 0.0
-        self._epoches = 10
-        self._batchsize = 100
+        self._epoches = 50
+        self._batchsize = 125
         input_size = X.shape[1]
 
         # initialization loop

@@ -1,10 +1,33 @@
 from __future__ import print_function
 import os
+import numpy as np
 import tensorflow as tf
 
+'''
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
+'''
+import gzip
+
+with gzip.open('Marcel-data/train-images-ubyte.gz', 'rb') as f:
+    trX = np.frombuffer(f.read())
+with gzip.open('Marcel-data/train-labels-ubyte.gz', 'rb') as f:
+    trY = np.frombuffer(f.read())
+with gzip.open('Marcel-data/test-images-ubyte.gz', 'rb') as f:
+    teX = np.frombuffer(f.read())
+with gzip.open('Marcel-data/test-labels-ubyte.gz', 'rb') as f:
+    teY = np.frombuffer(f.read())
+
+trX = trX.reshape((-1, 5016))
+trY = trY.reshape((-1, 6))
+teX = teX.reshape((-1, 5016))
+teY = teY.reshape((-1, 6))
+
+print(trX.shape)
+print(trY.shape)
+print(teX.shape)
+print(teY.shape)
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -15,8 +38,8 @@ batch_size = 128
 display_step = 10
 
 # Network Parameters
-n_input = 784  # MNIST data input (img shape: 28*28)
-n_classes = 10  # MNIST total classes (0-9 digits)
+n_input = trX.shape[1]  # MNIST data input (img shape: 28*28)
+n_classes = trY.shape[1]  # MNIST total classes (0-9 digits)
 dropout = 0.75  # Dropout, probability to keep units
 
 # tf Graph input
