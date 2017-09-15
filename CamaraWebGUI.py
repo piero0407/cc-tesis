@@ -184,11 +184,11 @@ def show_frame():
 
     if x < 0:
         x = 0
-    elif y < 0:
+    if y < 0:
         y = 0
-    elif w > frame.shape[1]:
+    if w > frame.shape[1]:
         w = frame.shape[1]
-    elif h > frame.shape[0]:
+    if h > frame.shape[0]:
         h = frame.shape[0]
 
     # img = cv2.rectangle(correctedFrame, (x, y),
