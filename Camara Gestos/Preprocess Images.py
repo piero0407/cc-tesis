@@ -70,28 +70,28 @@ for image in images:
         cv2.imwrite(r"NewFrames/"+newName+"_UPIZQ"+str(counter)+".jpg", cv2.flip(frame, -1))
         
         frameShape = frame.shape
-        ret = cv2.getRotationMatrix2D((frameShape[1]/2.0, frameShape[0]/2.0), 90, 1)
+        ret = cv2.getRotationMatrix2D((frameShape[1]/2.0, frameShape[0]/2.0), 45, 1)
+        frame = cv2.warpAffine(frame,ret,((frameShape[1],(frameShape[0]))))
+        cv2.imwrite(r"NewFrames/"+newName+"_45DER"+str(counter)+".jpg", frame)
+        cv2.imwrite(r"NewFrames/"+newName+"_45IZQ"+str(counter)+".jpg", cv2.flip(frame, 1))
+        cv2.imwrite(r"NewFrames/"+newName+"_45UPDER"+str(counter)+".jpg", cv2.flip(frame, 0))
+        cv2.imwrite(r"NewFrames/"+newName+"_45UPIZQ"+str(counter)+".jpg", cv2.flip(frame, -1))
+
+        frameShape = frame.shape
+        ret = cv2.getRotationMatrix2D((frameShape[1]/2.0, frameShape[0]/2.0), 45, 1)
         frame = cv2.warpAffine(frame,ret,((frameShape[1],(frameShape[0]))))
         cv2.imwrite(r"NewFrames/"+newName+"_90DER"+str(counter)+".jpg", frame)
         cv2.imwrite(r"NewFrames/"+newName+"_90IZQ"+str(counter)+".jpg", cv2.flip(frame, 1))
         cv2.imwrite(r"NewFrames/"+newName+"_90UPDER"+str(counter)+".jpg", cv2.flip(frame, 0))
         cv2.imwrite(r"NewFrames/"+newName+"_90UPIZQ"+str(counter)+".jpg", cv2.flip(frame, -1))
-
-        frameShape = frame.shape
-        ret = cv2.getRotationMatrix2D((frameShape[1]/2.0, frameShape[0]/2.0), 180, 1)
-        frame = cv2.warpAffine(frame,ret,((frameShape[1],(frameShape[0]))))
-        cv2.imwrite(r"NewFrames/"+newName+"_180DER"+str(counter)+".jpg", frame)
-        cv2.imwrite(r"NewFrames/"+newName+"_180IZQ"+str(counter)+".jpg", cv2.flip(frame, 1))
-        cv2.imwrite(r"NewFrames/"+newName+"_180UPDER"+str(counter)+".jpg", cv2.flip(frame, 0))
-        cv2.imwrite(r"NewFrames/"+newName+"_180UPIZQ"+str(counter)+".jpg", cv2.flip(frame, -1))
         
         frameShape = frame.shape
-        ret = cv2.getRotationMatrix2D((frameShape[1]/2.0, frameShape[0]/2.0), 270, 1)
+        ret = cv2.getRotationMatrix2D((frameShape[1]/2.0, frameShape[0]/2.0), 45, 1)
         frame = cv2.warpAffine(frame,ret,((frameShape[1],(frameShape[0]))))
-        cv2.imwrite(r"NewFrames/"+newName+"_270DER.jpg", frame)
-        cv2.imwrite(r"NewFrames/"+newName+"_270IZQ.jpg", cv2.flip(frame, 1))
-        cv2.imwrite(r"NewFrames/"+newName+"_270UPDER.jpg", cv2.flip(frame, 0))
-        cv2.imwrite(r"NewFrames/"+newName+"_270UPIZQ.jpg", cv2.flip(frame, -1))
+        cv2.imwrite(r"NewFrames/"+newName+"_135DER"+str(counter)+".jpg", frame)
+        cv2.imwrite(r"NewFrames/"+newName+"_135IZQ"+str(counter)+".jpg", cv2.flip(frame, 1))
+        cv2.imwrite(r"NewFrames/"+newName+"_135UPDER"+str(counter)+".jpg", cv2.flip(frame, 0))
+        cv2.imwrite(r"NewFrames/"+newName+"_135UPIZQ"+str(counter)+".jpg", cv2.flip(frame, -1))
         
     counter = counter+1
 '''
