@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 from PIL import Image, ImageTk
 
+# print(cv2.getBuildInformation())
 
 def key(event):
     global count, frame, x, y, w, h
@@ -136,13 +137,15 @@ def getContours(thresh):
 
 
 def show_frame():
-    global count, frame, cx, cy, x, y, w, h
+    global count, fgbg, frame, cx, cy, x, y, w, h
     '''Getting image from the Camera'''
     ret, frame = videoCapture.read()
     frame = cv2.flip(frame, 1)
+    fgmask = fgbg.apply(frame)
 
     '''Configure image'''
-    correctedFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    correctedFrame = frame[:, :, 0]*fgmask
+    # cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     # Blur the image
     blur = cv2.blur(frame, (3, 3))
@@ -215,6 +218,8 @@ def show_frame():
 
 
 videoCapture = cv2.VideoCapture(0)
+fgbg = cv2.createBackgroundSubtractorMOG2()
+# createBackgroundSubtractorMOG()
 
 window = tk.Tk()
 window.bind('<Escape>', lambda e: window.quit())
