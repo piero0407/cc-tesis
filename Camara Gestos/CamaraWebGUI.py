@@ -246,12 +246,12 @@ def show_frame():
     imgtk1 = ImageTk.PhotoImage(image=img1)
     lmain.imgtk = imgtk1
     lmain.configure(image=imgtk1)
-    '''
+    
     img2 = Image.fromarray(cropped)
     imgtk2 = ImageTk.PhotoImage(image=img2)
     lcrop.imgtk = imgtk2
     lcrop.configure(image=imgtk2)
-    '''
+    
     count += 1
 
     lmain.after(5, show_frame)
@@ -269,9 +269,9 @@ window.bind("<Key>", key)
 window.bind("<Up>", up)
 window.bind("<Down>", down)
 lmain = tk.Label(window)
-#lcrop = tk.Label(window)
+lcrop = tk.Label(window)
 lmain.pack(side=tk.LEFT)
-#lcrop.pack(side=tk.LEFT)
+lcrop.pack(side=tk.LEFT)
 
 count = 0.0
 ret, frame = videoCapture.read()
