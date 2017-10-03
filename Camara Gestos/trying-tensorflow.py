@@ -1,10 +1,12 @@
 # Getting the MNIST data provided by Tensorflow
-import os
 import cv2
 import numpy as np
+import gzip
+import matplotlib.pyplot as plt
+
+import os
 from pathlib import Path
 from glob import iglob
-import gzip
 
 '''
 from tensorflow.examples.tutorials.mnist import input_data
