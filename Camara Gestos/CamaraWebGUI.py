@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image, ImageTk
 
 # print(cv2.getBuildInformation())
-face_cascade = cv2.CascadeClassifier('Camara Gestos/xml/haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('./xml/haarcascade_frontalface_default.xml')
 
 
 def key(event):
@@ -187,7 +187,7 @@ def show_frame():
     for (x, y, w, h) in faces:
         cv2.rectangle(foregroundImage, (x, y), (x+w, y+h), (0, 0, 0), cv2.FILLED)
 
-    mask2 = cv2.inRange(foregroundImage, np.array([0, 131, 110]), np.array([255, 157, 135]))
+    mask2 = cv2.inRange(foregroundImage, np.array([0, 131, 70]), np.array([255, 173, 135]))
     mask2 = cv2.morphologyEx(mask2, cv2.MORPH_OPEN, kernel)
     mask2 = cv2.medianBlur(mask2, 5)
     ret, thresh = cv2.threshold(mask2, 127, 255, 0)
@@ -257,10 +257,10 @@ def show_frame():
     lmain.after(5, show_frame)
 
 
-videoCapture = cv2.VideoCapture(0)
-fgbgy = cv2.createBackgroundSubtractorMOG2(varThreshold=16, detectShadows=False)
-fgbgcr = cv2.createBackgroundSubtractorMOG2(varThreshold=16, detectShadows=False)
-fgbgcb = cv2.createBackgroundSubtractorMOG2(varThreshold=16, detectShadows=False)
+videoCapture = cv2.VideoCapture(1)
+fgbgy = cv2.createBackgroundSubtractorMOG2(varThreshold=20, detectShadows=False)
+fgbgcr = cv2.createBackgroundSubtractorMOG2(varThreshold=20, detectShadows=False)
+fgbgcb = cv2.createBackgroundSubtractorMOG2(varThreshold=20, detectShadows=False)
 # createBackgroundSubtractorMOG()
 
 window = tk.Tk()
