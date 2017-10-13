@@ -8,7 +8,7 @@ randomNum = 100
 
 labes = ['A', 'B', 'C', 'F', 'P', 'V']
 
-f = gz.open('marcel-dataset.pkl.gz', 'rb')
+f = gz.open('dataset.pkl.gz', 'rb')
 training_data, validation_data = pkl.load(f, encoding='latin1')
 
 x_train = training_data[0]

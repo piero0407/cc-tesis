@@ -4,28 +4,27 @@ import os
 import numpy as np
 from PIL import Image, ImageTk
 
+import os
+from pathlib import Path
+from glob import iglob
 
-hand_cascade = cv2.CascadeClassifier('Camara Gestos/aGest.xml')
-images = load_images_from_folder("NewFrames", mirror)
+tePath = Path("./SavedFrames2")
+teList = [f for f in tePath.resolve().glob('**/*') if f.is_file()]
 
 counter = 0
 index = ''
-for image in images:
-    frame = image[0]
+for f in teList:
+    image = cv2.imread(str(f))
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    #cv2.imshow('img', gray)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
 
-    faces = hand_cascade.detectMultiScale(gray, 1.3, 5)
-    for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x + w, y+h), (255, 0, 0), 2)
-    
-    cv2.imshow('img', gray)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    '''
-    basename = os.path.splitext(image[1])[0]
-    newName = "G" + basename[5]
+    basename = os.path.splitext(f.name)[0]
+    newName = basename[:2]
 
+    frame = image
     cv2.imwrite(r"NewFrames/" + newName + "_DER" +
                 str(counter) + ".jpg", frame)
     cv2.imwrite(r"NewFrames/" + newName + "_IZQ" +
@@ -35,10 +34,10 @@ for image in images:
     cv2.imwrite(r"NewFrames/" + newName + "_UPIZQ" +
                 str(counter) + ".jpg", cv2.flip(frame, -1))
 
-    frameShape = frame.shape
+    frameShape = image.shape
     ret = cv2.getRotationMatrix2D(
         (frameShape[1] / 2.0, frameShape[0] / 2.0), 45, 1)
-    frame = cv2.warpAffine(frame, ret, ((frameShape[1], (frameShape[0]))))
+    frame = cv2.warpAffine(image, ret, ((frameShape[1], (frameShape[0]))))
     cv2.imwrite(r"NewFrames/" + newName + "_45DER" +
                 str(counter) + ".jpg", frame)
     cv2.imwrite(r"NewFrames/" + newName + "_45IZQ" +
@@ -48,10 +47,10 @@ for image in images:
     cv2.imwrite(r"NewFrames/" + newName + "_45UPIZQ" +
                 str(counter) + ".jpg", cv2.flip(frame, -1))
 
-    frameShape = frame.shape
+    frameShape = image.shape
     ret = cv2.getRotationMatrix2D(
         (frameShape[1] / 2.0, frameShape[0] / 2.0), 45, 1)
-    frame = cv2.warpAffine(frame, ret, ((frameShape[1], (frameShape[0]))))
+    frame = cv2.warpAffine(image, ret, ((frameShape[1], (frameShape[0]))))
     cv2.imwrite(r"NewFrames/" + newName + "_90DER" +
                 str(counter) + ".jpg", frame)
     cv2.imwrite(r"NewFrames/" + newName + "_90IZQ" +
@@ -61,10 +60,10 @@ for image in images:
     cv2.imwrite(r"NewFrames/" + newName + "_90UPIZQ" +
                 str(counter) + ".jpg", cv2.flip(frame, -1))
 
-    frameShape = frame.shape
+    frameShape = image.shape
     ret = cv2.getRotationMatrix2D(
         (frameShape[1] / 2.0, frameShape[0] / 2.0), 45, 1)
-    frame = cv2.warpAffine(frame, ret, ((frameShape[1], (frameShape[0]))))
+    frame = cv2.warpAffine(image, ret, ((frameShape[1], (frameShape[0]))))
     cv2.imwrite(r"NewFrames/" + newName + "_135DER" +
                 str(counter) + ".jpg", frame)
     cv2.imwrite(r"NewFrames/" + newName + "_135IZQ" +
@@ -75,4 +74,3 @@ for image in images:
                 str(counter) + ".jpg", cv2.flip(frame, -1))
 
     counter = counter + 1
-    '''

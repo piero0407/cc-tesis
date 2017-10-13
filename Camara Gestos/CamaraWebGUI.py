@@ -6,13 +6,13 @@ import numpy as np
 from PIL import Image, ImageTk
 
 # print(cv2.getBuildInformation())
-face_cascade = cv2.CascadeClassifier('./xml/haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier(r"./xml/haarcascade_frontalface_default.xml")
 
 
 def key(event):
     global count, cropped
     if event.char in ['1', '2', '3', '4', '5', '6']:
-        cv2.imwrite(r"SavedFrames2/G%c_number%d.jpg" %
+        cv2.imwrite(r"./SavedFrames2/G%c_number%d.jpg" %
                     (event.char, count), cv2.cvtColor(cropped, cv2.COLOR_RGB2BGR))
     print(event)
 
@@ -257,10 +257,10 @@ def show_frame():
     lmain.after(5, show_frame)
 
 
-videoCapture = cv2.VideoCapture(1)
-fgbgy = cv2.createBackgroundSubtractorMOG2(varThreshold=20, detectShadows=False)
-fgbgcr = cv2.createBackgroundSubtractorMOG2(varThreshold=20, detectShadows=False)
-fgbgcb = cv2.createBackgroundSubtractorMOG2(varThreshold=20, detectShadows=False)
+videoCapture = cv2.VideoCapture(0)
+fgbgy = cv2.createBackgroundSubtractorMOG2(varThreshold=32, detectShadows=False)
+fgbgcr = cv2.createBackgroundSubtractorMOG2(varThreshold=32, detectShadows=False)
+fgbgcb = cv2.createBackgroundSubtractorMOG2(varThreshold=32, detectShadows=False)
 # createBackgroundSubtractorMOG()
 
 window = tk.Tk()
