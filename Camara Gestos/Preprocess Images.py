@@ -49,7 +49,7 @@ for f in teList:
 
     frameShape = image.shape
     ret = cv2.getRotationMatrix2D(
-        (frameShape[1] / 2.0, frameShape[0] / 2.0), 45, 1)
+        (frameShape[1] / 2.0, frameShape[0] / 2.0), 90, 1)
     frame = cv2.warpAffine(image, ret, ((frameShape[1], (frameShape[0]))))
     cv2.imwrite(r"NewFrames/" + newName + "_90DER" +
                 str(counter) + ".jpg", frame)
@@ -62,7 +62,7 @@ for f in teList:
 
     frameShape = image.shape
     ret = cv2.getRotationMatrix2D(
-        (frameShape[1] / 2.0, frameShape[0] / 2.0), 45, 1)
+        (frameShape[1] / 2.0, frameShape[0] / 2.0), 135, 1)
     frame = cv2.warpAffine(image, ret, ((frameShape[1], (frameShape[0]))))
     cv2.imwrite(r"NewFrames/" + newName + "_135DER" +
                 str(counter) + ".jpg", frame)
