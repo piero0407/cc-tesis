@@ -1,22 +1,21 @@
-import numpy as np
 import gzip as gz
 import pickle as pkl
+
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 numOfLabels = 6
-randomNum = 100
+randomNum = 25
 
-labes = ['A', 'B', 'C', 'F', 'P', 'V']
-
-f = gz.open('dataset.pkl.gz', 'rb')
+f = gz.open('marcel.pkl.gz', 'rb')
 training_data, validation_data = pkl.load(f, encoding='latin1')
 
-x_train = training_data[0]
-y_train = (np.arange(numOfLabels) == training_data[1][:, None]).astype(np.float32)
+x_train, y_train = training_data
+x_validation, y_validation = validation_data
 
-x_validation = validation_data[0]
-y_validation = (np.arange(numOfLabels) == validation_data[1][:, None]).astype(np.float32)
-
-plt.imshow(x_train[randomNum].reshape(100, 100), cmap='gray')
+plt.imshow(x_train[randomNum].reshape(128, 128), cmap='gray')
 plt.show()
-# print(y_train[randomNum])
+print(y_train[randomNum])
+
+print(training_data[0] .shape)
