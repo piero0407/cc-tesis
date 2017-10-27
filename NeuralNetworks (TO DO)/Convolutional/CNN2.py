@@ -18,7 +18,7 @@ def run_cnn():
     numOfLabels = 6
     randomNum = 100
 
-    f = gz.open('dataset.pkl.gz', 'rb')
+    f = gz.open('marcel.pkl.gz', 'rb')
     training_data, validation_data = pkl.load(f, encoding='latin1')
 
     # Python optimisation variables

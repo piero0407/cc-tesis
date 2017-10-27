@@ -18,4 +18,7 @@ plt.imshow(x_train[randomNum].reshape(128, 128), cmap='gray')
 plt.show()
 print(y_train[randomNum])
 
-print(training_data[0] .shape)
+print(training_data[0].shape)
+print(training_data[1].shape)
+print(validation_data[0].shape)
+print(validation_data[1].shape)
