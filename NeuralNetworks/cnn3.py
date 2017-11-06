@@ -1,24 +1,19 @@
-
 # coding: utf-8
 
 # In[1]:
 
 
-import tensorflow as tf
-import numpy as np
-from dataset import *
-
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
+import numpy as np
+import tensorflow as tf
 
-# In[2]:
-
-
+from dataset import *
 from DMutil import *
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-# In[3]:
+# In[2]:
 
 
 def forwardPropagation(X, W, b, G):
@@ -27,11 +22,11 @@ def forwardPropagation(X, W, b, G):
     for l in range(1, L):
         Z = tf.matmul(A, W[l]) + b[l]
         A = G[l](Z)
-        
+
     return A
 
 
-# In[4]:
+# In[3]:
 
 
 def initializeParameters(layers):
@@ -41,11 +36,11 @@ def initializeParameters(layers):
     for l in range(1, L):
         W[l] = weightVariable([layers[l-1], layers[l]])
         b[l] = biasVariable([1, layers[l]])
-        
+
     return W, b
 
 
-# In[5]:
+# In[4]:
 
 def saveParameters(WK, bK, W, b, sess):
     L = len(W)
@@ -67,6 +62,7 @@ def saveParameters(WK, bK, W, b, sess):
     pkl.dump(f, parameters)
     f.close()
 
+
 def dnnModel(tra, val, #tes,
              convLayers,
              layers,
@@ -83,19 +79,19 @@ def dnnModel(tra, val, #tes,
     interval = int(numIter / numPrints)
     m = tra['X'].shape[0]
     L = len(layers)
-    
+
     nextBatch = lambda data: data[offset:offset+batchSize]
-    
+
     with tf.Session() as sess:
         np.random.seed(1981)
         tf.set_random_seed(1981)
         X = tf.placeholder(tf.float32, shape=[None, tra['X'].shape[1]])
         Y = tf.placeholder(tf.float32, shape=[None, tra['Y'].shape[1]])
-        
+
         fil = 128
         col = 128
         CL = len(convLayers)
-        
+
         WK = [None]*CL
         bK = [None]*CL
         for l in range(1, CL):
@@ -108,25 +104,25 @@ def dnnModel(tra, val, #tes,
             h_pool = tf.nn.max_pool(h_conv, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
             fil = fil // 2
             col = col // 2
-        
+
         h_flat = tf.reshape(h_pool, [-1, fil*col*convLayers[CL-1][1]])
-        
+
         W, b = initializeParameters(layers)
         Y_ = forwardPropagation(h_flat, W, b, activations)
-        
+
         loss = tf.nn.softmax_cross_entropy_with_logits(labels=Y, logits=Y_)
-#         regularizer = tf.nn.l2_loss(W[L-1])
-#         loss = tf.reduce_mean(loss + lambd * regularizer)
+        # regularizer = tf.nn.l2_loss(W[L-1])
+        # loss = tf.reduce_mean(loss + lambd * regularizer)
         loss = tf.reduce_mean(loss)
-#         step = tf.train.GradientDescentOptimizer(alpha).minimize(loss)
+        # step = tf.train.GradientDescentOptimizer(alpha).minimize(loss)
         step = tf.train.AdamOptimizer(learning_rate=alpha,
                                       beta1=beta1,
                                       beta2=beta2,
                                       epsilon=epsilon).minimize(loss)
-        
+
         prediction = tf.equal(tf.argmax(Y, 1), tf.argmax(Y_, 1))
         accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
-        
+
         sess.run(tf.global_variables_initializer())
         for epoch in range(numIter):
             p = np.random.permutation(m)
@@ -136,17 +132,17 @@ def dnnModel(tra, val, #tes,
                 loss4print, _ = sess.run([loss, step], feed_dict=fd)
             if printLoss and (epoch + 1) % interval == 0:
                 print('Loss at %4d: %12.6f' % (epoch, loss4print))
-        
-        saveParameters(WK, bK, W, b)
-        prctAcc = sess.run(accuracy, feed_dict={X: tra['X'][:500,:], Y: tra['Y'][:500,:]})
+
+        saveParameters(WK, bK, W, b, sess)
+        prctAcc = sess.run(accuracy, feed_dict={X: tra['X'][:500, :], Y: tra['Y'][:500, :]})
         print("Training accuracy: %6.2f%%" % (prctAcc*100))
         prctAcc = sess.run(accuracy, feed_dict={X: val['X'], Y: val['Y']})
         print("Validation accuracy: %6.2f%%" % (prctAcc*100))
-#         prctAcc = sess.run(accuracy, feed_dict={X: tes['X'], Y: tes['Y']})
-#         print("Test accuracy: %6.2f%%"%(prctAcc*100))
+        # prctAcc = sess.run(accuracy, feed_dict={X: tes['X'], Y: tes['Y']})
+        # print("Test accuracy: %6.2f%%"%(prctAcc*100))
 
 
-# In[12]:
+# In[5]:
 
 
 def test():
@@ -157,17 +153,16 @@ def test():
                    lambda z: tf.nn.softmax(z)]
     convLayers = [[1, 1], [7, 128], [5, 64], [5, 32]]
     layers = [16*16*32, 512, 256, 6]
-#    convLayers = [[1, 1], [5, 32]]
-#    layers = [64*64*32, 512, 6]
+    # convLayers = [[1, 1], [5, 32]]
+    # layers = [64*64*32, 512, 6]
     dnnModel(tra, val,
              convLayers,
              layers,
              activations,
-             numIter=100,
+             numIter=40,
              batchSize=64,
              # batchSize=tra['X'].shape[0],
              alpha=0.00001,
-             numPrints=100)
+             numPrints=20)
 
 test()
-
